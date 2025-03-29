@@ -2,10 +2,9 @@
 
 ## Passos para execução
 
-cd libft
-make bonus
-cd ..
-cd mlx
-make
-cd ..
-make
+- cd libft
+- make bonus
+- cd ../mlx
+- make
+- cd ..
+- make
