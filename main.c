@@ -163,11 +163,12 @@ t_map	*get_map(char *filename)
 void	close_app()
 {
 	t_mlx *mlx = get_mlx();
-	mlx_destroy_window(mlx->cnt, mlx->wnd);
 	mlx_destroy_image(mlx->cnt, mlx->img);
+	mlx_destroy_window(mlx->cnt, mlx->wnd);
 	mlx_destroy_display(mlx->cnt);
 	free(mlx->cnt);
 	free(mlx);
+	exit (0);
 }
 
 void	m_up()
