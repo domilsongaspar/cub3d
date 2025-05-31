@@ -6,7 +6,7 @@
 /*   By: dgaspar <dgaspar@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 16:07:25 by dgaspar           #+#    #+#             */
-/*   Updated: 2025/05/06 11:54:51 by dgaspar          ###   ########.fr       */
+/*   Updated: 2025/05/31 12:20:48 by dgaspar          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,7 @@ void	print_map(char **matriz)
 			write(STDOUT_FILENO, &matriz[y][x], 1);
 			x++;
 		}
+		write(1, "\n", 1);
 		y++;
 	}
 }

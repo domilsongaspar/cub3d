@@ -6,7 +6,7 @@
 /*   By: dgaspar <dgaspar@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 04:22:27 by dgaspar           #+#    #+#             */
-/*   Updated: 2025/05/10 07:05:51 by dgaspar          ###   ########.fr       */
+/*   Updated: 2025/05/30 10:47:35 by dgaspar          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,12 +42,13 @@ void	vertical_top_lines(int x, int y)
 	if ((x >= mlx->scene->map->maxc && y < height) || (!map[y]))
 		return ;
 	if (map[y][x] == '0' || map[y][x] == 'N' || map[y][x] == 'S'
-		|| map[y][x] == 'E' || map[y][x] == 'W')
+		|| map[y][x] == 'E' || map[y][x] == 'W' || map[y][x] == 'D'
+		|| map[y][x] == 'O')
 		put_error(ERR_NOT_SURROUNDED_BY_WALLS);
 	if (map[y][x] == ' ')
 	{
-		go_left(x, y, mlx->scene->map->maxc);
-		go_right(x, y, mlx->scene->map->maxc);
+		go_left(x, y, mlx->scene->map->maxc, height);
+		go_right(x, y, mlx->scene->map->maxc, height);
 		vertical_top_lines(x, y + 1);
 	}
 	if (map[y][x] == '1' || y + 1 > height)
@@ -66,12 +67,13 @@ void	vertical_down_lines(int x, int y)
 	if (x + 1 > mlx->scene->map->maxc || y < 0)
 		return ;
 	if (map[y][x] == '0' || map[y][x] == 'N' || map[y][x] == 'S'
-		|| map[y][x] == 'E' || map[y][x] == 'W')
+		|| map[y][x] == 'E' || map[y][x] == 'W' || map[y][x] == 'D'
+		|| map[y][x] == 'O')
 		put_error(ERR_NOT_SURROUNDED_BY_WALLS);
 	if (map[y][x] == ' ')
 	{
-		go_left(x, y, mlx->scene->map->maxc);
-		go_right(x, y, mlx->scene->map->maxc);
+		go_left(x, y, mlx->scene->map->maxc, height);
+		go_right(x, y, mlx->scene->map->maxc, height);
 		vertical_down_lines(x, y - 1);
 	}
 	if (map[y][x] == '1')
@@ -87,15 +89,20 @@ void	horizontal_left_lines(int x, int y)
 	mlx = get_mlx();
 	map = mlx->scene->map->copy;
 	height = mlx->scene->map->maxl_with_nl - 1;
-	if (x >= mlx->scene->map->maxc || y >= height || !map[y])
+	if (y >= height || !map[y])
 		return ;
+	if (x >= mlx->scene->map->maxc)
+	{
+		x = 0;
+		y++;
+	}
 	if (map[y][x] == '0' || map[y][x] == 'N' || map[y][x] == 'S'
-		|| map[y][x] == 'E' || map[y][x] == 'W')
+		|| map[y][x] == 'E' || map[y][x] == 'W' || map[y][x] == 'D'
+		|| map[y][x] == 'O')
 		put_error(ERR_NOT_SURROUNDED_BY_WALLS);
 	if (map[y][x] == ' ' || map[y][x] == '\0')
 	{
-		go_top(x, y, height);
-		go_down(x, y, height);
+		(go_top(x, y, height), go_down(x, y, height));
 		horizontal_left_lines(x + 1, y);
 	}
 	if (map[y][x] == '1')
@@ -111,15 +118,20 @@ void	horizontal_right_lines(int x, int y)
 	mlx = get_mlx();
 	map = mlx->scene->map->copy;
 	height = mlx->scene->map->maxl_with_nl - 1;
-	if (x < 0 || y >= height)
+	if (y >= height)
 		return ;
+	if (x < 0)
+	{
+		x = mlx->scene->map->maxc - 1;
+		y++;
+	}
 	if (map[y][x] == '0' || map[y][x] == 'N' || map[y][x] == 'S'
-		|| map[y][x] == 'E' || map[y][x] == 'W')
+		|| map[y][x] == 'E' || map[y][x] == 'W' || map[y][x] == 'D'
+		|| map[y][x] == 'O')
 		put_error(ERR_NOT_SURROUNDED_BY_WALLS);
 	if (map[y][x] == ' ' || map[y][x] == '\0')
 	{
-		go_top(x, y, height);
-		go_down(x, y, height);
+		(go_top(x, y, height), go_down(x, y, height));
 		horizontal_right_lines(x - 1, y);
 	}
 	if (map[y][x] == '1')

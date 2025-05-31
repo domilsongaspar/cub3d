@@ -6,7 +6,7 @@
 /*   By: dgaspar <dgaspar@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 14:45:12 by cgama             #+#    #+#             */
-/*   Updated: 2025/05/10 07:05:54 by dgaspar          ###   ########.fr       */
+/*   Updated: 2025/05/26 12:43:18 by dgaspar          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,20 +52,42 @@ void	load_one_text(int text_num, char *text_path)
 			&mlx->scene->texture[text_num].endian);
 }
 
+void	load_one_sprite(int text_num, char *sprite_path)
+{
+	t_mlx	*mlx;
+
+	mlx = get_mlx();
+	mlx->weapon->sprites[text_num].img = mlx_xpm_file_to_image(mlx->cnt,
+			sprite_path, &mlx->weapon->sprites[text_num].width,
+			&mlx->weapon->sprites[text_num].height);
+	if (!mlx->weapon->sprites[text_num].img)
+		exit_if_fail(mlx, text_num);
+	mlx->weapon->sprites[text_num].addr = mlx_get_data_addr(
+			mlx->weapon->sprites[text_num].img,
+			&mlx->weapon->sprites[text_num].bpp,
+			&mlx->weapon->sprites[text_num].line_length,
+			&mlx->weapon->sprites[text_num].endian);
+}
+
 void	load_all_texts(t_mlx *mlx)
 {
 	load_one_text(0, mlx->scene->no);
 	load_one_text(1, mlx->scene->so);
 	load_one_text(2, mlx->scene->we);
 	load_one_text(3, mlx->scene->ea);
+	load_one_text(4, "bonus/sprites/door.xpm");
 }
 
 int	get_texture_color(t_texture *texture, int x, int y)
 {
 	char	*dst;
+	int		color;
 
 	if (x < 0 || y < 0 || x >= texture->width || y >= texture->height)
 		return (0);
 	dst = texture->addr + (y * texture->line_length + x * (texture->bpp / 8));
+	color = *(unsigned int *)dst;
+	if ((color & 0x00FFFFFF) == 0)
+		return (-1);
 	return (*(int *)dst);
 }

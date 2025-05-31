@@ -6,17 +6,16 @@
 /*   By: dgaspar <dgaspar@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/30 14:12:29 by dgaspar           #+#    #+#             */
-/*   Updated: 2025/05/10 05:44:12 by dgaspar          ###   ########.fr       */
+/*   Updated: 2025/05/31 13:47:31 by dgaspar          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef CUB3D_H
 # define CUB3D_H
 
-# include <stdlib.h> 
-# include <unistd.h> 
-# include <stdio.h> 
-# include <sys/time.h> 
+# include <stdlib.h>
+# include <unistd.h>
+# include <stdio.h>
 # include <math.h>
 # include <fcntl.h>
 # include <stdbool.h>
@@ -26,7 +25,7 @@
 # include "../libft/include/libft.h"
 
 # define WIDTH 640
-# define HEIGHT 400
+# define HEIGHT 480
 
 # define _W 119
 # define _A 97
@@ -50,7 +49,7 @@
 # define ERR_WITH_SKY_COLOR "Error\nInvalid ceiling color format.\n"
 # define ERR_WITH_FLOOR_COLOR "Error\nInvalid floor color format.\n"
 # define ERR_WITH_TEXTURE_FILE "Error\nThere´s a texture that can´t be open.\n"
-# define ERR_MAP_WRONG_POS "Map wrong position\n"
+# define ERR_MAP_WRONG_POS "Wrong map position\n"
 # define ERR_MISSING_MAP "Error\nMissing map\n"
 
 # define ERR_DUP_NO_TEXTURE "Error\nThere are more than one NO texture\n"
@@ -67,6 +66,12 @@
 # define ERR_MAP_WITH_BLANK_LINE "Error\nThere is some blank line at map.\n"
 # define ERR_NOT_SURROUNDED_BY_WALLS "Error\nThe map is \
 not surrounded by walls.\n"
+
+typedef enum e_hit
+{
+	X,
+	Y
+}	t_hit;
 
 typedef struct s_vec
 {
@@ -86,6 +91,7 @@ typedef struct s_map
 	char	ply_sybl;
 	char	**matriz;
 	char	**copy;
+	char	**cifred;
 	int		maxl;
 	int		maxc;
 	int		maxl_with_nl;
@@ -146,7 +152,7 @@ typedef struct s_ray
 typedef struct s_dda
 {
 	int		hit;
-	int		side;
+	t_hit	side;
 	int		draw_start;
 	int		draw_end;
 	int		line_height;
@@ -189,6 +195,7 @@ void	draw_vertical_line(int x, int start, int end, int color);
 void	clear_img(void);
 int		set_wall_colors(int side, int step_x, int step_y);
 void	init_image(t_mlx *mlx);
+void	pre_validations(char *map_src);
 
 void	initialize(t_mlx *mlx, char *map_src);
 void	draw_height(t_mlx *mlx, t_vec ray);
@@ -232,8 +239,13 @@ void	free_matriz(char **matriz);
 
 void	go_top(int x, int y, int height);
 void	go_down(int x, int y, int height);
-void	go_left(int x, int y, int width);
-void	go_right(int x, int y, int width);
+void	go_left(int x, int y, int width, int height);
+void	go_right(int x, int y, int width, int height);
+
+void	fill_top(int x, int y, int height);
+void	fill_down(int x, int y, int height);
+void	fill_left(int x, int y, int width, int height);
+void	fill_right(int x, int y, int width, int height);
 
 bool	valid_color_range(int value, char *color);
 bool	valid_color_format(char *color);
@@ -242,13 +254,18 @@ bool	valid_file_format(char *src);
 bool	valid_file_existence(char *src);
 void	validate_textures(t_scene *scene);
 
-bool	valid_file_format(char *src);
 void	validate_map(t_scene *scene);
 void	vertical_top_lines(int x, int y);
 void	vertical_down_lines(int x, int y);
 void	horizontal_left_lines(int x, int y);
 void	horizontal_right_lines(int x, int y);
+
+void	fill_top_lines(int x, int y);
+void	fill_down_lines(int x, int y);
+void	fill_left_lines(int x, int y);
+void	fill_right_lines(int x, int y);
 size_t	ft_strlen_line(char *s);
+size_t	ft_strlen_skip(char *s, char c);
 
 void	put_error(char *error);
 void	exit_clean(void);

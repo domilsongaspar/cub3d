@@ -6,7 +6,7 @@
 /*   By: dgaspar <dgaspar@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 16:06:40 by dgaspar           #+#    #+#             */
-/*   Updated: 2025/05/10 07:05:50 by dgaspar          ###   ########.fr       */
+/*   Updated: 2025/05/31 11:50:45 by dgaspar          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,14 +96,10 @@ void	fill_colors_and_textures(t_mlx *mlx, char *filename)
 void	fill_scene(char	*filename)
 {
 	t_mlx	*mlx;
-	int		i;
 
 	mlx = get_mlx();
-	mlx->scene->map = get_map(filename);
 	fill_colors_and_textures(mlx, filename);
-	i = 0;
-	while (i < 4)
-		mlx->scene->texture[i++].img = NULL;
+	mlx->scene->map = get_map(filename);
 	if (mlx->scene->has_map)
 	{
 		if (missing_texture(mlx->scene) || missing_color(mlx->scene))

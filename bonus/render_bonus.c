@@ -6,7 +6,7 @@
 /*   By: dgaspar <dgaspar@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/28 17:43:35 by dgaspar           #+#    #+#             */
-/*   Updated: 2025/05/10 09:04:38 by dgaspar          ###   ########.fr       */
+/*   Updated: 2025/05/29 14:52:42 by dgaspar          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,9 @@ void	calculate_dda(t_mlx *mlx, t_vec ray)
 			mlx->ray->map_y += mlx->ray->step_y;
 			mlx->dda->side = 1;
 		}
-		if (map_at(mlx->ray->map_x, mlx->ray->map_y) == '1')
+		if (map_at(mlx->ray->map_x, mlx->ray->map_y) == '1'
+			|| map_at(mlx->ray->map_x, mlx->ray->map_y) == DOOR_CHAR
+			|| map_at(mlx->ray->map_x, mlx->ray->map_y) == DOOR_OPEN_CHAR)
 			mlx->dda->hit = 1;
 	}
 	draw_height(mlx, ray);
@@ -103,6 +105,7 @@ void	render(t_mlx *mlx)
 	}
 	if (mlx->scene->show_minimap)
 		draw_minimap(mlx);
+	draw_weapon(mlx);
 	mlx_put_image_to_window(mlx->cnt, mlx->wnd, mlx->img, 0, 0);
 	mlx_destroy_image(mlx->cnt, mlx->img);
 }

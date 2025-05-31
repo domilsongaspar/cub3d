@@ -6,7 +6,7 @@
 /*   By: dgaspar <dgaspar@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 07:11:10 by dgaspar           #+#    #+#             */
-/*   Updated: 2025/05/10 07:05:56 by dgaspar          ###   ########.fr       */
+/*   Updated: 2025/05/26 11:13:35 by dgaspar          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,8 @@ bool	valid_symbols(t_scene *scene)
 		{
 			if (mtx[y][x] != '0' && mtx[y][x] != '1' && mtx[y][x] != 'N'
 				&& mtx[y][x] != 'E' && mtx[y][x] != 'S' && mtx[y][x] != 'W'
-				&& mtx[y][x] != ' ' && mtx[y][x] != '\n')
+				&& mtx[y][x] != ' ' && mtx[y][x] != '\n'
+				&& mtx[y][x] != DOOR_CHAR && mtx[y][x] != DOOR_OPEN_CHAR)
 				return (false);
 			x++;
 		}
@@ -65,16 +66,12 @@ bool	has_blank_line(t_scene *scene)
 {
 	int		y;
 	char	**mtx;
-	bool	newline;
 
 	y = 0;
 	mtx = scene->map->matriz;
-	newline = false;
 	while (mtx[y])
 	{
 		if (ft_strcmp(mtx[y], "\n") == 0)
-			newline = true;
-		if (!is_invisible_line(mtx[y]) != 0 && newline)
 			return (true);
 		y++;
 	}

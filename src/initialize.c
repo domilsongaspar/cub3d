@@ -6,7 +6,7 @@
 /*   By: dgaspar <dgaspar@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/28 17:47:59 by dgaspar           #+#    #+#             */
-/*   Updated: 2025/05/10 02:21:32 by dgaspar          ###   ########.fr       */
+/*   Updated: 2025/05/31 14:29:41 by dgaspar          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,8 +86,8 @@ void	initialize(t_mlx *mlx, char *map_src)
 {
 	mlx->cnt = mlx_init();
 	if (!mlx->cnt)
-		put_error("Error\nFalha ao inicializar MLX\n");
-	mlx->wnd = mlx_new_window(mlx->cnt, WIDTH, HEIGHT, "cub3D");
+		put_error("Error\nFailed while initializing MLX\n");
+	mlx->wnd = NULL;
 	mlx->scene = malloc(sizeof(t_scene));
 	mlx->scene->error = NULL;
 	mlx->scene->no = NULL;
@@ -98,10 +98,11 @@ void	initialize(t_mlx *mlx, char *map_src)
 	mlx->scene->floor = NULL;
 	mlx->scene->map = NULL;
 	mlx->scene->has_map = false;
-	if (!valid_file_existence(map_src))
-		put_error(ERR_WITH_FILE);
-	if (!valid_file_format(map_src))
-		put_error(ERR_WITH_FILE_FORMAT);
+	mlx->scene->texture[0].img = NULL;
+	mlx->scene->texture[1].img = NULL;
+	mlx->scene->texture[2].img = NULL;
+	mlx->scene->texture[3].img = NULL;
+	pre_validations(map_src);
 	(fill_scene(map_src), load_all_texts(mlx));
 	mlx->ray = malloc(sizeof(t_ray));
 	mlx->dda = malloc(sizeof(t_dda));

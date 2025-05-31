@@ -22,9 +22,9 @@ void	fill_data(t_mlx *mlx, char *line, int len)
 		mlx->scene->we = ft_strtrim(ft_strdup(line + len), " ");
 	else if (ft_strncmp(line, "EA ", len) == 0)
 		mlx->scene->ea = ft_strtrim(ft_strdup(line + len), " ");
-	else if (ft_strncmp(line, "F ", len) == 0)
+	else if (ft_strncmp(line, "F ", len) == 0 || ft_strncmp(line, "F", 1) == 0)
 		mlx->scene->floor = ft_strtrim(ft_strdup(line + len), " ");
-	else if (ft_strncmp(line, "C ", len) == 0)
+	else if (ft_strncmp(line, "C ", len) == 0 || ft_strncmp(line, "C", 1) == 0)
 		mlx->scene->sky = ft_strtrim(ft_strdup(line + len), " ");
 	free(line);
 }

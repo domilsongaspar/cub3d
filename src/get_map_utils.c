@@ -52,6 +52,9 @@ void	get_map_loop(int fd, char *line, int *i, t_map *map)
 		line = get_next_line(fd);
 		if (!line || !*line)
 			break ;
+		if (*i > 0 && !ft_strchr("01NESW ", line[0]))
+			if (!ft_strchr("\n", line[0]))
+				put_error("Error\nInvalid Symbol or Wrong map position.\n");
 		if (!is_texture_or_color(line))
 		{
 			if (*i == 0 && is_invisible_line(line))

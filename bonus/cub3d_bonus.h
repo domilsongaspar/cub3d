@@ -6,17 +6,17 @@
 /*   By: dgaspar <dgaspar@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/30 14:12:29 by dgaspar           #+#    #+#             */
-/*   Updated: 2025/05/10 10:38:36 by dgaspar          ###   ########.fr       */
+/*   Updated: 2025/05/29 20:20:07 by dgaspar          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef CUB3D_BONUS_H
 # define CUB3D_BONUS_H
 
-# include <stdlib.h> 
-# include <unistd.h> 
-# include <stdio.h> 
-# include <sys/time.h> 
+# include <stdlib.h>
+# include <unistd.h>
+# include <stdio.h>
+# include <sys/time.h>
 # include <math.h>
 # include <fcntl.h>
 # include <stdbool.h>
@@ -25,19 +25,21 @@
 
 # include "../libft/include/libft.h"
 
-# define WIDTH 640
-# define HEIGHT 400
+# define WIDTH 840
+# define HEIGHT 600
 
 # define _W 119
 # define _A 97
 # define _S 115
 # define _D 100
+# define _E 101
 
 # define _LEFT 65361
 # define _RIGTH 65363
 
 # define MOV_SPEED 0.006
 # define ROT_SPEED 0.005
+# define MOUSE_ROT_SPEED 0.09
 # define MINIMAP_SCALE 10
 
 # define BUTTON_PRESS 4
@@ -68,6 +70,8 @@
 # define ERR_MAP_WITH_BLANK_LINE "Error\nThere is some blank line at map.\n"
 # define ERR_NOT_SURROUNDED_BY_WALLS "Error\nThe map is \
 not surrounded by walls.\n"
+# define DOOR_CHAR 'D'
+# define DOOR_OPEN_CHAR 'O'
 
 typedef struct s_vec
 {
@@ -105,6 +109,22 @@ typedef struct s_texture
 	int		endian;
 }	t_texture;
 
+typedef enum e_door_state
+{
+	DOOR_CLOSED = 0,
+	DOOR_OPENING = 1,
+	DOOR_OPEN = 2,
+	DOOR_CLOSING = 3,
+}	t_door_state;
+
+typedef struct s_door
+{
+	int				x;
+	int				y;
+	double			anim_time;
+	t_door_state	state;
+}	t_door;
+
 typedef struct s_scene
 {
 	char		*no;
@@ -121,7 +141,9 @@ typedef struct s_scene
 	bool		show_minimap;
 	int			has_map;
 	t_map		*map;
-	t_texture	texture[4];
+	t_texture	texture[5];
+	t_door		*doors;
+	int			door_count;
 }	t_scene;
 
 typedef struct s_ply
@@ -155,22 +177,34 @@ typedef struct s_dda
 	double	perp_dist;
 }	t_dda;
 
+typedef struct s_weapon
+{
+	int			width;
+	int			height;
+	int			current_frame;
+	int			anim_counter;
+	int			is_firing;
+	int			is_visible;
+	t_texture	sprites[5];
+}	t_weapon;
+
 typedef struct s_mlx
 {
-	void	*cnt;
-	void	*wnd;
-	void	*img;
-	char	*addr;
-	int		bpp;
-	int		line_length;
-	int		endian;
-	int		width;
-	int		height;
-	t_ray	*ray;
-	t_ply	*ply;
-	t_dda	*dda;
-	t_scene	*scene;
-	bool	keys[6];
+	void		*cnt;
+	void		*wnd;
+	void		*img;
+	char		*addr;
+	int			bpp;
+	int			line_length;
+	int			endian;
+	int			width;
+	int			height;
+	bool		keys[6];
+	t_ray		*ray;
+	t_ply		*ply;
+	t_dda		*dda;
+	t_scene		*scene;
+	t_weapon	*weapon;
 }	t_mlx;
 
 typedef struct s_tex
@@ -185,80 +219,93 @@ typedef struct s_tex
 	double	text_pos;
 }	t_tex;
 
-t_mlx	*get_mlx(void);
-void	put_pixel(int x, int y, int color);
-void	draw_vertical_line(int x, int start, int end, int color);
-void	clear_img(void);
-int		set_wall_colors(int side, int step_x, int step_y);
-void	init_image(t_mlx *mlx);
+void		set_texture_number(t_mlx *mlx, t_tex *tex);
+t_door		*find_door(t_mlx *mlx, int x, int y);
+void		init_doors(t_mlx *mlx);
+void		check_door_interaction(t_mlx *mlx);
+void		update_doors(t_mlx *mlx);
+void		load_one_sprite(int text_num, char *sprite_path);
+int			mouse_handler(int button, int x, int y, t_mlx *mlx);
+int			mouse_move_handler(int x, int y, t_mlx *mlx);
+t_mlx		*get_mlx(void);
+void		put_pixel(int x, int y, int color);
+void		draw_vertical_line(int x, int start, int end, int color);
+void		clear_img(void);
+int			set_wall_colors(int side, int step_x, int step_y);
+void		init_image(t_mlx *mlx);
+void		pre_validations(char *map_src);
 
-void	initialize(t_mlx *mlx, char *map_src);
-void	draw_height(t_mlx *mlx, t_vec ray);
-void	render(t_mlx *mlx);
-void	move_up(t_ply *ply, t_map *map, bool key);
-void	move_down(t_ply *ply, t_map *map, bool key);
-void	move_left(t_ply *ply, t_map *map, t_vec perp, bool key);
-void	move_right(t_ply *ply, t_map *map, t_vec perp, bool key);
-int		update(t_mlx *mlx);
-int		close_game(void);
-void	perfom_rotate(t_mlx *mlx);
-int		key_press(int kc, t_mlx *mlx);
-int		key_release(int kc, t_mlx *mlx);
-void	increase_line_counter(int *val, int *data, char *line);
-void	get_map_loop(int fd, char *line, int *i, t_map *map);
-t_map	*get_map(char *filename);
-void	dup_map(char **map);
-char	map_at(int x, int y);
-char	move_on(double x, double y);
+void		initialize(t_mlx *mlx, char *map_src);
+void		initialize_all_textures(t_mlx *mlx);
+void		init_fail(void *data, char *msg);
+t_weapon	*init_weapon(void);
+void		draw_height(t_mlx *mlx, t_vec ray);
+void		draw_weapon(t_mlx *mlx);
+void		render(t_mlx *mlx);
+void		move_up(t_ply *ply, t_map *map, bool key);
+void		move_down(t_ply *ply, t_map *map, bool key);
+void		move_left(t_ply *ply, t_map *map, t_vec perp, bool key);
+void		move_right(t_ply *ply, t_map *map, t_vec perp, bool key);
+int			update(t_mlx *mlx);
+int			close_game(void);
+void		perfom_rotate(t_mlx *mlx);
+int			key_press(int kc, t_mlx *mlx);
+int			key_release(int kc, t_mlx *mlx);
+void		increase_line_counter(int *val, int *data, char *line);
+void		get_map_loop(int fd, char *line, int *i, t_map *map);
+t_map		*get_map(char *filename);
+void		dup_map(char **map);
+char		map_at(int x, int y);
+char		move_on(double x, double y);
 
-void	print_map(char **matriz);
-void	print_scene(t_scene *scene);
-void	fill_scene(char	*filename);
-void	fill_data(t_mlx *mlx, char *line, int len);
-void	close_if_duplicated(t_mlx *mlx, char *line);
+void		print_map(char **matriz);
+void		print_scene(t_scene *scene);
+void		fill_scene(char	*filename);
+void		fill_data(t_mlx *mlx, char *line, int len);
+void		close_if_duplicated(t_mlx *mlx, char *line);
 
-bool	missing_texture(t_scene *scene);
-bool	missing_color(t_scene *scene);
-bool	missing_map(t_scene *scene);
-bool	is_missing(t_scene *scene);
-bool	is_invisible_line(char *line);
+bool		missing_texture(t_scene *scene);
+bool		missing_color(t_scene *scene);
+bool		missing_map(t_scene *scene);
+bool		is_missing(t_scene *scene);
+bool		is_invisible_line(char *line);
 
-bool	is_texture_or_color(char *line);
-bool	has_duplicated_texture(t_scene *scene, char *elem);
-bool	has_duplicated_color(t_scene *scene, char *elem);
-void	load_all_texts(t_mlx *mlx);
-int		get_texture_color(t_texture *texture, int x, int y);
-void	draw_textured_line(t_mlx *mlx, int x, t_vec *ray);
+bool		is_texture_or_color(char *line);
+bool		has_duplicated_texture(t_scene *scene, char *elem);
+bool		has_duplicated_color(t_scene *scene, char *elem);
+void		load_all_texts(t_mlx *mlx);
+int			get_texture_color(t_texture *texture, int x, int y);
+void		draw_textured_line(t_mlx *mlx, int x, t_vec *ray);
 
-int		ft_rgb(int r, int g, int b);
-int		get_longest_line(char **matriz);
-char	*ft_strcspn(char *str, char c);
-void	paint_sky_and_floor(t_scene *scene);
-void	free_matriz(char **matriz);
+int			ft_rgb(int r, int g, int b);
+int			get_longest_line(char **matriz);
+char		*ft_strcspn(char *str, char c);
+void		paint_sky_and_floor(t_scene *scene);
+void		free_matriz(char **matriz);
 
-void	go_top(int x, int y, int height);
-void	go_down(int x, int y, int height);
-void	go_left(int x, int y, int width);
-void	go_right(int x, int y, int width);
+void		go_top(int x, int y, int height);
+void		go_down(int x, int y, int height);
+void		go_left(int x, int y, int width, int height);
+void		go_right(int x, int y, int width, int height);
 
-bool	valid_color_range(int value, char *color);
-bool	valid_color_format(char *color);
-void	validate_scene(t_scene *scene, char *src);
-bool	valid_file_format(char *src);
-bool	valid_file_existence(char *src);
-void	validate_textures(t_scene *scene);
+bool		valid_color_range(int value, char *color);
+bool		valid_color_format(char *color);
+void		validate_scene(t_scene *scene, char *src);
+bool		valid_file_format(char *src);
+bool		valid_file_existence(char *src);
+void		validate_textures(t_scene *scene);
 
-bool	valid_file_format(char *src);
-void	validate_map(t_scene *scene);
-void	vertical_top_lines(int x, int y);
-void	vertical_down_lines(int x, int y);
-void	horizontal_left_lines(int x, int y);
-void	horizontal_right_lines(int x, int y);
-size_t	ft_strlen_line(char *s);
+void		validate_map(t_scene *scene);
+void		vertical_top_lines(int x, int y);
+void		vertical_down_lines(int x, int y);
+void		horizontal_left_lines(int x, int y);
+void		horizontal_right_lines(int x, int y);
+size_t		ft_strlen_line(char *s);
+size_t		ft_strlen_skip(char *s, char c);
 
-void	put_error(char *error);
-void	exit_clean(void);
+void		put_error(char *error);
+void		exit_clean(void);
 
-void	draw_minimap(t_mlx *mlx);
+void		draw_minimap(t_mlx *mlx);
 
 #endif

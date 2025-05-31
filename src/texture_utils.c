@@ -6,7 +6,7 @@
 /*   By: dgaspar <dgaspar@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 14:45:12 by cgama             #+#    #+#             */
-/*   Updated: 2025/05/10 03:54:08 by dgaspar          ###   ########.fr       */
+/*   Updated: 2025/05/31 14:05:06 by dgaspar          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,10 +16,10 @@ void	exit_if_fail(t_mlx *mlx, int text_num)
 {
 	char	*cardiais[4];
 
-	cardiais[0] = "Norte";
-	cardiais[1] = "Sul";
-	cardiais[2] = "Oeste";
-	cardiais[3] = "Este";
+	cardiais[0] = "North";
+	cardiais[1] = "South";
+	cardiais[2] = "West";
+	cardiais[3] = "East";
 	ft_putstr_fd("Error\nProblem while loading texture ", 2);
 	ft_putstr_fd(cardiais[text_num], 2);
 	ft_putstr_fd(": ", 2);

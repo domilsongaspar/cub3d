@@ -6,7 +6,7 @@
 /*   By: dgaspar <dgaspar@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/28 17:49:52 by dgaspar           #+#    #+#             */
-/*   Updated: 2025/05/10 02:37:16 by dgaspar          ###   ########.fr       */
+/*   Updated: 2025/05/31 14:29:35 by dgaspar          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,10 @@ int	close_game(void)
 
 	mlx = get_mlx();
 	free_textures(mlx);
-	mlx_destroy_window(mlx->cnt, mlx->wnd);
+	if (mlx->wnd != NULL)
+	{
+		mlx_destroy_window(mlx->cnt, mlx->wnd);
+	}
 	mlx_destroy_display(mlx->cnt);
 	free(mlx->cnt);
 	free(mlx->dda);
@@ -54,6 +57,8 @@ int	close_game(void)
 	free(mlx->ply);
 	if (mlx->scene->map && mlx->scene->map->copy)
 		free_matriz(mlx->scene->map->copy);
+	if (mlx->scene->map && mlx->scene->map->cifred)
+		free_matriz(mlx->scene->map->cifred);
 	free(mlx->scene);
 	ft_free_collector();
 	exit(0);

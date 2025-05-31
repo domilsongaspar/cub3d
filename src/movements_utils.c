@@ -6,7 +6,7 @@
 /*   By: dgaspar <dgaspar@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/10 05:01:42 by dgaspar           #+#    #+#             */
-/*   Updated: 2025/05/10 06:39:09 by dgaspar          ###   ########.fr       */
+/*   Updated: 2025/05/31 12:18:58 by dgaspar          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,8 @@ char	move_on(double x, double y)
 	if (grid_x >= 1 && grid_x < mlx->scene->map->maxc - 2
 		&& grid_y >= 1 && grid_y < mlx->scene->map->maxl)
 	{
+		if (mlx->scene->map->cifred[grid_y][grid_x] == '$')
+			return ('1');
 		return ('0');
 	}
 	return ('1');

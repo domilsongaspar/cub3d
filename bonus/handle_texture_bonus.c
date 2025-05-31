@@ -6,28 +6,19 @@
 /*   By: dgaspar <dgaspar@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/01 14:47:37 by cgama             #+#    #+#             */
-/*   Updated: 2025/05/10 07:05:49 by dgaspar          ###   ########.fr       */
+/*   Updated: 2025/05/29 16:35:30 by cgama            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d_bonus.h"
 
-void	set_text_num(t_mlx *mlx, int *text_num)
+void	initialize_all_textures(t_mlx *mlx)
 {
-	if (mlx->dda->side == 0)
-	{
-		if (mlx->ray->step_x > 0)
-			*text_num = 3;
-		else
-			*text_num = 2;
-	}
-	else
-	{
-		if (mlx->ray->step_y > 0)
-			*text_num = 1;
-		else
-			*text_num = 0;
-	}
+	mlx->scene->texture[0].img = NULL;
+	mlx->scene->texture[1].img = NULL;
+	mlx->scene->texture[2].img = NULL;
+	mlx->scene->texture[3].img = NULL;
+	mlx->scene->texture[4].img = NULL;
 }
 
 void	draw_line( t_mlx *mlx, t_tex *tex, int x)
@@ -50,7 +41,7 @@ void	draw_textured_line(t_mlx *mlx, int x, t_vec *ray)
 	t_tex	tex;
 	int		line_height;
 
-	set_text_num(mlx, &tex.text_num);
+	set_texture_number(mlx, &tex);
 	if (mlx->dda->draw_start < 0)
 		mlx->dda->draw_start = 0;
 	if (mlx->dda->draw_end >= HEIGHT)
@@ -61,9 +52,6 @@ void	draw_textured_line(t_mlx *mlx, int x, t_vec *ray)
 	tex.wallx -= floor(tex.wallx);
 	tex.text_x = (int)(tex.wallx
 			* (double)mlx->scene->texture[tex.text_num].width);
-	if ((mlx->dda->side == 0 && ray->x > 0)
-		|| (mlx->dda->side == 1 && ray->y < 0))
-		tex.text_x = mlx->scene->texture[tex.text_num].width - tex.text_x - 1;
 	line_height = mlx->dda->line_height;
 	if (line_height < 1)
 		line_height = 1;

@@ -6,7 +6,7 @@
 /*   By: dgaspar <dgaspar@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/10 05:01:42 by dgaspar           #+#    #+#             */
-/*   Updated: 2025/05/10 10:36:18 by dgaspar          ###   ########.fr       */
+/*   Updated: 2025/05/29 14:49:15 by dgaspar          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,8 @@ int	key_press(int kc, t_mlx *mlx)
 		mlx->keys[4] = true;
 	if (kc == _RIGTH)
 		mlx->keys[5] = true;
+	if (kc == _E)
+		mlx->keys[6] = true;
 	if (kc == SHIFT && mlx->scene->show_minimap == false)
 		mlx->scene->show_minimap = true;
 	else if (kc == SHIFT && mlx->scene->show_minimap == true)
@@ -49,6 +51,8 @@ int	key_release(int kc, t_mlx *mlx)
 		mlx->keys[4] = false;
 	if (kc == _RIGTH)
 		mlx->keys[5] = false;
+	if (kc == _E)
+		mlx->keys[6] = false;
 	return (0);
 }
 
@@ -61,12 +65,11 @@ char	move_on(double x, double y)
 	mlx = get_mlx();
 	grid_x = (int)x;
 	grid_y = (int)y;
-	if (grid_x >= 1 && grid_x < mlx->scene->map->maxc - 2
-		&& grid_y >= 1 && grid_y < mlx->scene->map->maxl)
-	{
-		return (mlx->scene->map->matriz[grid_y][grid_x]);
-	}
-	return ('1');
+	if (mlx->scene->map->matriz[grid_y][grid_x] == DOOR_CHAR)
+		return ('1');
+	if (mlx->scene->map->matriz[grid_y][grid_x] == DOOR_OPEN_CHAR)
+		return ('0');
+	return (mlx->scene->map->matriz[grid_y][grid_x]);
 }
 
 int	update(t_mlx *mlx)
@@ -80,6 +83,8 @@ int	update(t_mlx *mlx)
 	move_left(mlx->ply, mlx->scene->map, perp, mlx->keys[2]);
 	move_right(mlx->ply, mlx->scene->map, perp, mlx->keys[3]);
 	perfom_rotate(mlx);
+	check_door_interaction(mlx);
+	update_doors(mlx);
 	render(mlx);
 	return (0);
 }

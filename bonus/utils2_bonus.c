@@ -6,7 +6,7 @@
 /*   By: dgaspar <dgaspar@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 11:28:21 by dgaspar           #+#    #+#             */
-/*   Updated: 2025/05/10 07:05:55 by dgaspar          ###   ########.fr       */
+/*   Updated: 2025/05/27 11:19:54 by dgaspar          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,4 +65,25 @@ size_t	ft_strlen_line(char *s)
 	while (s[i] && s[i] != '\n')
 		i++;
 	return (i);
+}
+
+size_t	ft_strlen_skip(char *s, char c)
+{
+	size_t	i;
+
+	i = 0;
+	while (*s && *s == c)
+		s++;
+	while (*s)
+	{
+		s++;
+		i++;
+	}
+	return (i);
+}
+
+void	init_fail(void *data, char *msg)
+{
+	if (!data)
+		put_error(msg);
 }

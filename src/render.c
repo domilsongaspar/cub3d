@@ -59,13 +59,13 @@ void	calculate_dda(t_mlx *mlx, t_vec ray)
 		{
 			mlx->ray->side_x += mlx->ray->delta_x;
 			mlx->ray->map_x += mlx->ray->step_x;
-			mlx->dda->side = 0;
+			mlx->dda->side = X;
 		}
 		else
 		{
 			mlx->ray->side_y += mlx->ray->delta_y;
 			mlx->ray->map_y += mlx->ray->step_y;
-			mlx->dda->side = 1;
+			mlx->dda->side = Y;
 		}
 		if (map_at(mlx->ray->map_x, mlx->ray->map_y) == '1')
 			mlx->dda->hit = 1;
@@ -77,7 +77,7 @@ void	draw_height(t_mlx *mlx, t_vec ray)
 {
 	mlx->dda->perp_dist = (mlx->ray->map_y - mlx->ply->pos.y + \
 		(1 - mlx->ray->step_y) / 2) / ray.y;
-	if (mlx->dda->side == 0)
+	if (mlx->dda->side == X)
 		mlx->dda->perp_dist = (mlx->ray->map_x - mlx->ply->pos.x + \
 			(1 - mlx->ray->step_x) / 2) / ray.x;
 	mlx->dda->line_height = (int)(HEIGHT / mlx->dda->perp_dist);

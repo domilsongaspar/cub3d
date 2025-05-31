@@ -6,7 +6,7 @@
 /*   By: dgaspar <dgaspar@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 16:06:40 by dgaspar           #+#    #+#             */
-/*   Updated: 2025/05/10 02:21:26 by dgaspar          ###   ########.fr       */
+/*   Updated: 2025/05/31 11:44:36 by dgaspar          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,31 +17,31 @@ bool	is_texture_or_color(char *line)
 	char	*tmp;
 
 	tmp = ft_strtrim(line, " ");
-	if (ft_strncmp(tmp, "NO", 2) == 0 || ft_strncmp(tmp, "SO", 2) == 0
-		|| ft_strncmp(tmp, "WE", 2) == 0 || ft_strncmp(tmp, "EA", 2) == 0
-		|| ft_strncmp(tmp, "F", 1) == 0 || ft_strncmp(tmp, "C", 1) == 0)
+	if (ft_strncmp(tmp, "NO ", 3) == 0 || ft_strncmp(tmp, "SO ", 3) == 0
+		|| ft_strncmp(tmp, "WE ", 3) == 0 || ft_strncmp(tmp, "EA ", 3) == 0
+		|| ft_strncmp(tmp, "F ", 2) == 0 || ft_strncmp(tmp, "C ", 2) == 0)
 		return (true);
 	return (false);
 }
 
 bool	has_duplicated_texture(t_scene *scene, char *elem)
 {
-	if (ft_strncmp(elem, "NO", 2) == 0 && scene->no)
+	if (ft_strncmp(elem, "NO ", 3) == 0 && scene->no)
 	{
 		scene->error = ERR_DUP_NO_TEXTURE;
 		return (true);
 	}
-	if (ft_strncmp(elem, "SO", 2) == 0 && scene->so)
+	if (ft_strncmp(elem, "SO ", 3) == 0 && scene->so)
 	{
 		scene->error = ERR_DUP_SO_TEXTURE;
 		return (true);
 	}
-	if (ft_strncmp(elem, "WE", 2) == 0 && scene->we)
+	if (ft_strncmp(elem, "WE ", 3) == 0 && scene->we)
 	{
 		scene->error = ERR_DUP_WE_TEXTURE;
 		return (true);
 	}
-	if (ft_strncmp(elem, "EA", 2) == 0 && scene->ea)
+	if (ft_strncmp(elem, "EA ", 3) == 0 && scene->ea)
 	{
 		scene->error = ERR_DUP_EA_TEXTURE;
 		return (true);
@@ -51,12 +51,12 @@ bool	has_duplicated_texture(t_scene *scene, char *elem)
 
 bool	has_duplicated_color(t_scene *scene, char *elem)
 {
-	if (ft_strncmp(elem, "F", 1) == 0 && scene->floor)
+	if (ft_strncmp(elem, "F ", 2) == 0 && scene->floor)
 	{
 		scene->error = ERR_DUP_FLOOR_COLOR;
 		return (true);
 	}
-	if (ft_strncmp(elem, "C", 1) == 0 && scene->sky)
+	if (ft_strncmp(elem, "C ", 2) == 0 && scene->sky)
 	{
 		scene->error = ERR_DUP_CEIL_COLOR;
 		return (true);
@@ -96,14 +96,10 @@ void	fill_colors_and_textures(t_mlx *mlx, char *filename)
 void	fill_scene(char	*filename)
 {
 	t_mlx	*mlx;
-	int		i;
 
 	mlx = get_mlx();
-	mlx->scene->map = get_map(filename);
 	fill_colors_and_textures(mlx, filename);
-	i = 0;
-	while (i < 4)
-		mlx->scene->texture[i++].img = NULL;
+	mlx->scene->map = get_map(filename);
 	if (mlx->scene->has_map)
 	{
 		if (missing_texture(mlx->scene) || missing_color(mlx->scene))

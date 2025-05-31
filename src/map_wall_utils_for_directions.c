@@ -6,7 +6,7 @@
 /*   By: dgaspar <dgaspar@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/09 21:41:40 by dgaspar           #+#    #+#             */
-/*   Updated: 2025/05/09 21:43:00 by dgaspar          ###   ########.fr       */
+/*   Updated: 2025/05/29 20:13:12 by dgaspar          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,8 @@ void	go_down(int x, int y, int height)
 		return ;
 	mlx = get_mlx();
 	map = mlx->scene->map->copy;
+	if (x >= mlx->scene->map->maxl_with_nl - 1)
+		return ;
 	if (map[y][x] == '0' || map[y][x] == 'N' || map[y][x] == 'S'
 		|| map[y][x] == 'E' || map[y][x] == 'W')
 		put_error(ERR_NOT_SURROUNDED_BY_WALLS);
@@ -48,7 +50,7 @@ void	go_down(int x, int y, int height)
 		return ;
 }
 
-void	go_left(int x, int y, int width)
+void	go_left(int x, int y, int width, int height)
 {
 	t_mlx	*mlx;
 	char	**map;
@@ -60,13 +62,15 @@ void	go_left(int x, int y, int width)
 	if (map[y][x] == '0' || map[y][x] == 'N' || map[y][x] == 'S'
 		|| map[y][x] == 'E' || map[y][x] == 'W')
 		put_error(ERR_NOT_SURROUNDED_BY_WALLS);
+	go_top(x, y, height);
+	go_down(x, y, height);
 	if (map[y][x] == ' ')
-		go_left(x - 1, y, width);
+		go_left(x - 1, y, width, height);
 	if (map[y][x] == '1')
 		return ;
 }
 
-void	go_right(int x, int y, int width)
+void	go_right(int x, int y, int width, int height)
 {
 	t_mlx	*mlx;
 	char	**map;
@@ -78,8 +82,10 @@ void	go_right(int x, int y, int width)
 	if (map[y][x] == '0' || map[y][x] == 'N' || map[y][x] == 'S'
 		|| map[y][x] == 'E' || map[y][x] == 'W')
 		put_error(ERR_NOT_SURROUNDED_BY_WALLS);
+	go_top(x, y, height);
+	go_down(x, y, height);
 	if (map[y][x] == ' ')
-		go_left(x + 1, y, width);
+		go_right(x + 1, y, width, height);
 	if (map[y][x] == '1')
 		return ;
 }

@@ -6,7 +6,7 @@
 /*   By: dgaspar <dgaspar@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 07:11:10 by dgaspar           #+#    #+#             */
-/*   Updated: 2025/05/06 12:55:43 by dgaspar          ###   ########.fr       */
+/*   Updated: 2025/05/31 13:53:29 by dgaspar          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,18 +41,22 @@ int	count_ply_symbol(t_scene *scene)
 	int		x;
 	int		y;
 	int		counter;
+	bool	wall;
 	char	**mtx;
 
 	y = 0;
 	counter = 0;
+	wall = false;
 	mtx = scene->map->matriz;
 	while (mtx[y])
 	{
 		x = 0;
 		while (mtx[y][x])
 		{
-			if (mtx[y][x] == 'N' || mtx[y][x] == 'E' || mtx[y][x] == 'S'
-				|| mtx[y][x] == 'W')
+			if (mtx[y][x] == '1')
+				wall = true;
+			if ((mtx[y][x] == 'N' || mtx[y][x] == 'E' || mtx[y][x] == 'S'
+				|| mtx[y][x] == 'W') && wall)
 				counter++;
 			x++;
 		}
@@ -65,16 +69,12 @@ bool	has_blank_line(t_scene *scene)
 {
 	int		y;
 	char	**mtx;
-	bool	newline;
 
 	y = 0;
 	mtx = scene->map->matriz;
-	newline = false;
 	while (mtx[y])
 	{
 		if (ft_strcmp(mtx[y], "\n") == 0)
-			newline = true;
-		if (!is_invisible_line(mtx[y]) != 0 && newline)
 			return (true);
 		y++;
 	}
@@ -90,6 +90,10 @@ void	is_surrounded_by_walls(void)
 	vertical_down_lines(0, mlx->scene->map->maxl_with_nl - 1);
 	horizontal_left_lines(0, 0);
 	horizontal_right_lines(mlx->scene->map->maxc - 1, 0);
+	fill_top_lines(0, 0);
+	fill_down_lines(0, mlx->scene->map->maxl_with_nl - 1);
+	fill_left_lines(0, 0);
+	fill_right_lines(mlx->scene->map->maxc - 1, 0);
 }
 
 void	validate_map(t_scene *scene)

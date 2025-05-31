@@ -14,11 +14,21 @@
 
 bool	valid_texture_format(char *src)
 {
-	int	len;
+	int		len;
+	char	*tmp;
 
 	len = ft_strlen(src);
-	if (is_invisible_line(src) || len < 4)
-		return (false);
+	tmp = ft_strrchr(src, '/');
+	if (tmp)
+	{
+		len = ft_strlen(tmp) - 1;
+		if (len <= 5)
+			return (false);
+		tmp++;
+		if (tmp[len - 4] == '.' && tmp[len - 3] == 'x'
+			&& tmp[len - 2] == 'p' && tmp[len - 1] == 'm')
+			return (true);
+	}
 	if (src[len - 4] == '.' && src[len - 3] == 'x'
 		&& src[len - 2] == 'p' && src[len - 1] == 'm')
 		return (true);

@@ -4,6 +4,7 @@ CFLAGS = -Wall -Werror -Wextra -Isrc -Iinclude
 AR = ar rcs
 
 VPATH = src:src/conversion:src/list:src/memory:src/output:src/string
+INC = include/libft.h
 SRC = ft_isalpha \
 	ft_isdigit \
 	ft_isalnum \
@@ -74,7 +75,7 @@ BONUS_OBJS = $(addsuffix .o, $(BONUS_SRC))
 .c.o: $(SRCS) $(BONUS_SRCS)
 	$(CC) $(CFLAGS) -c -o $@ $<
 
-$(NAME): $(OBJS)
+$(NAME): $(OBJS) $(INC)
 	$(AR) $@ $^
 
 bonus: $(OBJS) $(BONUS_OBJS)
@@ -88,6 +89,6 @@ clean:
 fclean: clean
 	rm -f $(NAME)
 
-re: clean all
+re: fclean all
 
 .PHONY: all clean fclean re bonus

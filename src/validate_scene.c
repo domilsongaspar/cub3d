@@ -14,9 +14,21 @@
 
 bool	valid_file_format(char *src)
 {
-	int	len;
+	int		len;
+	char	*tmp;
 
 	len = ft_strlen(src);
+	tmp = ft_strrchr(src, '/');
+	if (tmp)
+	{
+		len = ft_strlen(tmp) - 1;
+		if (len <= 5)
+			return (false);
+		tmp++;
+		if (tmp[len - 4] == '.' && tmp[len - 3] == 'c'
+			&& tmp[len - 2] == 'u' && tmp[len - 1] == 'b')
+			return (true);
+	}
 	if (src[len - 4] == '.' && src[len - 3] == 'c'
 		&& src[len - 2] == 'u' && src[len - 1] == 'b')
 		return (true);
@@ -25,12 +37,24 @@ bool	valid_file_format(char *src)
 
 bool	valid_file_existence(char *src)
 {
-	int	fd;
+	int		fd;
+	int		len;
+	char	*tmp;
 
+	len = ft_strlen(src);
 	fd = open(src, O_RDONLY);
 	if (fd < 0)
 		return (false);
 	close(fd);
+	tmp = ft_strrchr(src, '/');
+	if (tmp)
+	{
+		len = ft_strlen(tmp) - 1;
+		if (len <= 5)
+			return (false);
+	}
+	if (len <= 5)
+		put_error(ERR_WITH_FILE_FORMAT);
 	return (true);
 }
 

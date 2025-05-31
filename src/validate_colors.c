@@ -6,7 +6,7 @@
 /*   By: dgaspar <dgaspar@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 07:11:49 by dgaspar           #+#    #+#             */
-/*   Updated: 2025/05/09 21:44:35 by dgaspar          ###   ########.fr       */
+/*   Updated: 2025/05/27 11:18:32 by dgaspar          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,8 @@
 bool	valid_color_range(int value, char *color)
 {
 	color = ft_strtrim(color, " ");
-	if (value < 0 || value > 255 || ft_strlen(color) > 3)
+	if (value < 0 || value > 255 || ft_strlen_skip(color, '0') > 3
+		|| ft_strlen(color) == 0)
 		return (false);
 	return (true);
 }

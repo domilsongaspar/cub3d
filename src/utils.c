@@ -6,7 +6,7 @@
 /*   By: dgaspar <dgaspar@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/28 17:44:05 by dgaspar           #+#    #+#             */
-/*   Updated: 2025/05/09 21:44:10 by dgaspar          ###   ########.fr       */
+/*   Updated: 2025/05/31 12:19:06 by dgaspar          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,9 +26,15 @@ char	map_at(int x, int y)
 	t_mlx	*mlx;
 
 	mlx = get_mlx();
-	if (x >= 0 && x < mlx->scene->map->maxc
-		&& y >= 0 && y < mlx->scene->map->maxl)
+	if ((x > 0 && x < mlx->scene->map->maxc
+			&& y > 0 && y < mlx->scene->map->maxl))
 	{
+		if (y < mlx->scene->map->maxl
+			&& mlx->scene->map->cifred[y][x] == '$')
+			return ('1');
+		if ((x < mlx->scene->map->maxc)
+			&& mlx->scene->map->cifred[y][x] == '$')
+			return ('1');
 		return (mlx->scene->map->matriz[y][x]);
 	}
 	return ('1');
